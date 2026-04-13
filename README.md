@@ -22,3 +22,6 @@ streamlit run app.py
 - Upload a CSV or PDF file
 - Type your question
 - Click Send
+
+## Live Demo
+[Try DataTalk](https://datatalk-ai.streamlit.app/)
