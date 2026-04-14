@@ -64,25 +64,27 @@ if file is not None:
     elif file.name.endswith(".pdf"):
         prompt = pdf_parser(file)
 
-    if st.button("send", type="primary"):
-        if not user_input:
-            st.warning("Please enter a question.    ")
+    with st.form("ask"):
+        submitted = st.form_submit_button("Send")
 
-        else:
-            chat_completion = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a data analyst. Only answer based provided data concise and precise. If a user asks anything else, say 'I am restricted to data-related questions only.'"
-                },
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
-            model="llama-3.3-70b-versatile",
-        )
+    if not user_input:
+        st.warning("Please enter a question.    ")
+
+    else:
+        chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a data analyst. Only answer based provided data concise and precise. If a user asks anything else, say 'I am restricted to data-related questions only.'"
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        model="llama-3.3-70b-versatile",
+    )
             
-            st.write(chat_completion.choices[0].message.content)
+        st.write(chat_completion.choices[0].message.content)
 
 
