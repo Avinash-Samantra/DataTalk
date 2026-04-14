@@ -6,13 +6,13 @@ from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
-api_key = os.getenv("GROQ_API_KEY") or st.secrets("GROQ_API_KEY")
+api_key = os.getenv("GROQ_API_KEY") or st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=api_key)
 
 st.title("DataTalk")
 st.write("Every Information you need from csv and pdf's at you fingertip")
 
-file = st.file_uploader("Upload CSV/PDF files")
+file = st.file_uploader("Upload CSV/PDF files", type=["csv", "pdf"])
 
 def csv_parser(file):
     df = pd.read_csv(file)
@@ -32,7 +32,7 @@ def csv_parser(file):
     Answer: 
     """
         
-    return prompts
+    return prompts, user_input
 
 def pdf_parser(file):
     doc = pymupdf.open(stream=file.read(), filetype="pdf")
@@ -54,31 +54,35 @@ def pdf_parser(file):
     Answer: 
     """
 
-    return prompts
+    return prompts, user_input
 
 
 if file is not None:
     if file.name.endswith(".csv"):
-        prompt = csv_parser(file)
+        prompt, user_input = csv_parser(file)
     
     elif file.name.endswith(".pdf"):
         prompt = pdf_parser(file)
 
     if st.button("send", type="primary"):
-        chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a data analys. Only answer based provided data concise and precise. If a user asks anything else, say 'I am restricted to data-related questions only.'"
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        model="llama-3.3-70b-versatile",
-    )
-        
-        st.write(chat_completion.choices[0].message.content)
+        if not user_input:
+            st.warning("Please enter a question.    ")
+
+        else:
+            chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a data analyst. Only answer based provided data concise and precise. If a user asks anything else, say 'I am restricted to data-related questions only.'"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            model="llama-3.3-70b-versatile",
+        )
+            
+            st.write(chat_completion.choices[0].message.content)
 
 
