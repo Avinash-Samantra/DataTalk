@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY") or st.secrets("GROQ_API_KEY")
-client = Groq(api_key)
+client = Groq(api_key=api_key)
 
 st.title("DataTalk")
 st.write("Every Information you need from csv and pdf's at you fingertip")
