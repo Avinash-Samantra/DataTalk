@@ -62,13 +62,14 @@ if file is not None:
         prompt, user_input = csv_parser(file)
     
     elif file.name.endswith(".pdf"):
-        prompt = pdf_parser(file)
+        prompt, user_input = pdf_parser(file)
 
     with st.form("ask"):
         submitted = st.form_submit_button("Send")
 
-    if not user_input:
-        st.warning("Please enter a question.    ")
+    if submitted:
+        if not user_input:
+            st.warning("Please enter a question.    ")
 
     else:
         chat_completion = client.chat.completions.create(
