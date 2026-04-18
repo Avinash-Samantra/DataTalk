@@ -19,6 +19,9 @@ GROQ_API_KEY=your_key_here
 streamlit run app.py
 
 ## Usage
+
+> **Note:** Currently optimized for desktop. Mobile support coming soon.
+
 - Upload a CSV or PDF file
 - Type your question
 - Click Send

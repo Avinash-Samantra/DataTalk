@@ -10,6 +10,7 @@ api_key = os.getenv("GROQ_API_KEY") or st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=api_key)
 
 st.title("DataTalk")
+st.info("📱 Best experienced on desktop. Mobile support coming soon.")
 st.write("Every Information you need from csv and pdf's at you fingertip")
 
 file = st.file_uploader("Upload CSV/PDF files", type=["csv", "pdf"])
@@ -71,21 +72,21 @@ if file is not None:
         if not user_input:
             st.warning("Please enter a question.    ")
 
-    else:
-        chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a data analyst. Only answer based provided data concise and precise. If a user asks anything else, say 'I am restricted to data-related questions only.'"
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        model="llama-3.3-70b-versatile",
-    )
-            
-        st.write(chat_completion.choices[0].message.content)
+        else:
+            chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a data analyst. Only answer based provided data concise and precise. If a user asks anything else, say 'I am restricted to data-related questions only.'"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            model="llama-3.3-70b-versatile",
+        )
+                
+            st.write(chat_completion.choices[0].message.content)
 
 
