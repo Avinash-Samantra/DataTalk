@@ -18,6 +18,10 @@ file = st.file_uploader("Upload CSV/PDF files", type=["csv", "pdf"])
 def csv_parser(file):
     df = pd.read_csv(file)
     st.dataframe(df)
+    
+    if len(df) > 500:
+        st.warning("Large file detected. For best results upload files under 500 rows.")
+        df = df.head(500)
 
     data = df.to_string()
     user_input = st.text_input("Ask Questions Related on Data: ")
@@ -41,6 +45,10 @@ def pdf_parser(file):
     
     for page in doc:
         text.append(page.get_text())
+
+    if len(doc) > 10:
+        st.warning("Large PDF detected. For best results upload files under 10 pages.")
+        text = text[:10]
     
     user_input = st.text_input("Ask Questions Related on Data: ")
 
